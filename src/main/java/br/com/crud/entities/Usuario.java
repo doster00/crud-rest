@@ -14,8 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_user")
-public class User extends EntitySystem {
+@Table(name = "tb_usuario")
+public class Usuario extends EntidadePadrao {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,18 +23,18 @@ public class User extends EntitySystem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "nome")
+	private String nome;
 
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "password")
-	private String password;
+	@Column(name = "senha")
+	private String senha;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"))
-	private List<Role> roles;
+	@JoinTable(name = "tb_usuario_permissao", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_permissao"))
+	private List<Permissao> permissoes;
 
 	/*
 	 * Getters e Setters
@@ -50,12 +50,12 @@ public class User extends EntitySystem {
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getEmail() {
@@ -66,20 +66,20 @@ public class User extends EntitySystem {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getSenha() {
+		return senha;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
-	public List<Role> getRoles() {
-		return roles;
+	public List<Permissao> getPermissoes() {
+		return permissoes;
 	}
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
+	public void setPermissoes(List<Permissao> permissoes) {
+		this.permissoes = permissoes;
 	}
 
 }

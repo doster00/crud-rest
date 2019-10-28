@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_role")
-public class Role extends EntitySystem {
+@Table(name = "tb_permissao")
+public class Permissao extends EntidadePadrao {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,8 +17,8 @@ public class Role extends EntitySystem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "description")
-	private String description;
+	@Column(name = "descricao")
+	private String descricao;
 
 	/*
 	 * Getters e Setters
@@ -34,12 +34,12 @@ public class Role extends EntitySystem {
 		return id;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 }

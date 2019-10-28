@@ -12,24 +12,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.crud.entities.User;
-import br.com.crud.services.UserService;
+import br.com.crud.entities.Usuario;
+import br.com.crud.security.UsuarioSistema;
+import br.com.crud.services.UsuarioService;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private UserService userService;
+	private UsuarioService usuarioService;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		User user = userService.findByEmail(email);
-		return new org.springframework.security.core.userdetails.User(email, user.getPassword(), getPermissions(user));
+		Usuario usuario = usuarioService.buscarPorEmail(email);
+		return new UsuarioSistema(usuario, getPermissoes(usuario));
 	}
 
-	private Collection<? extends GrantedAuthority> getPermissions(User user) {
+	private Collection<? extends GrantedAuthority> getPermissoes(Usuario usuario) {
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-		user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getDescription())));
+		usuario.getPermissoes()
+				.forEach(permissao -> authorities.add(new SimpleGrantedAuthority(permissao.getDescricao())));
 		return authorities;
 	}
 

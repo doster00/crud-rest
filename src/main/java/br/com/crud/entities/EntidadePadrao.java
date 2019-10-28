@@ -2,7 +2,7 @@ package br.com.crud.entities;
 
 import java.io.Serializable;
 
-public abstract class EntitySystem implements Serializable {
+public abstract class EntidadePadrao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public abstract class EntitySystem implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EntitySystem other = (EntitySystem) obj;
+		EntidadePadrao other = (EntidadePadrao) obj;
 		if (getId() == null) {
 			if (other.getId() != null)
 				return false;

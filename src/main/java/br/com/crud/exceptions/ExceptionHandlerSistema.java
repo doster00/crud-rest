@@ -13,7 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class SystemExceptionHandler extends ResponseEntityExceptionHandler {
+public class ExceptionHandlerSistema extends ResponseEntityExceptionHandler {
 
 	@Autowired
 	private MessageSource messageSource;
@@ -30,8 +30,8 @@ public class SystemExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, new Erro("Invalid fields"), headers, HttpStatus.BAD_REQUEST, request);
 	}
 
-	@ExceptionHandler({ SystemException.class })
-	public ResponseEntity<Object> handleSystemException(SystemException ex, WebRequest request) {
+	@ExceptionHandler({ NegocioException.class })
+	public ResponseEntity<Object> handleSystemException(NegocioException ex, WebRequest request) {
 		return handleExceptionInternal(ex, new Erro(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 

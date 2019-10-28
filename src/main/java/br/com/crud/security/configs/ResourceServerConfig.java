@@ -1,4 +1,4 @@
-package br.com.crud.security.configurations;
+package br.com.crud.security.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,8 +1,8 @@
-package br.com.crud.security.utilities;
+package br.com.crud.security.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class PasswordGenerator {
+public class GeradorDeSenha {
 
 	public static void main(String[] args) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
