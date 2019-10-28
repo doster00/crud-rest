@@ -1,4 +1,4 @@
-package br.com.crud.cors;
+package br.com.crud.filters;
 
 import java.io.IOException;
 

@@ -1,10 +1,10 @@
 package br.com.crud.entities;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,11 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "tb_usuario")
+@Table(name = "tb_user")
 public class User extends EntitySystem {
 
 	private static final long serialVersionUID = 1L;
@@ -25,33 +23,18 @@ public class User extends EntitySystem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
-	@Column(name = "first_name")
-	private String firstName;
+	@Column(name = "name")
+	private String name;
 
-	@NotEmpty
-	@Column(name = "last_name")
-	private String lastName;
-
-	@NotEmpty
 	@Column(name = "email")
 	private String email;
 
-	@NotNull
-	@Column(name = "birthday")
-	private LocalDate birthday;
+	@Column(name = "password")
+	private String password;
 
-	@NotEmpty
-	@Column(name = "login")
-	private String login;
-
-	@NotEmpty
-	@Column(name = "phone")
-	private String phone;
-
-	@ManyToMany
-	@JoinTable(name = "user_car", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_car"))
-	private List<Car> cars;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"))
+	private List<Role> roles;
 
 	/*
 	 * Getters e Setters
@@ -67,20 +50,12 @@ public class User extends EntitySystem {
 		return id;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {
@@ -91,36 +66,20 @@ public class User extends EntitySystem {
 		this.email = email;
 	}
 
-	public LocalDate getBirthday() {
-		return birthday;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setBirthday(LocalDate birthday) {
-		this.birthday = birthday;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public String getLogin() {
-		return login;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public List<Car> getCars() {
-		return cars;
-	}
-
-	public void setCars(List<Car> cars) {
-		this.cars = cars;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 }

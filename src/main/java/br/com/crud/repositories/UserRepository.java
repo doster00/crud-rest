@@ -6,8 +6,6 @@ import br.com.crud.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	User findByEmail(String email);
-
-	User findByLogin(String login);
+	public User findByEmail(String email);
 
 }

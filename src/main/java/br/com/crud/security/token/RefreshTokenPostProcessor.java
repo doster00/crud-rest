@@ -1,4 +1,4 @@
-package br.com.crud.token;
+package br.com.crud.security.token;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

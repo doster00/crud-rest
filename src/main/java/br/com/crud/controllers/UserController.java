@@ -28,7 +28,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping	
+	@GetMapping
 	public ResponseEntity<List<User>> listAll() {
 		List<User> users = userService.listAll();
 		return CollectionUtils.isEmpty(users) ? ResponseEntity.notFound().build() : ResponseEntity.ok(users);
@@ -38,6 +38,11 @@ public class UserController {
 	public ResponseEntity<User> findById(@PathVariable Long id) throws Exception {
 		User user = userService.findById(id);
 		return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+	}
+
+	@PostMapping("/signup")
+	public void signup(@RequestBody User user) {
+		System.out.println("aqui o cara se cadastra");
 	}
 
 	@PostMapping

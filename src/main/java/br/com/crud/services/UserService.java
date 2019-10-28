@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.crud.entities.User;
@@ -53,12 +54,16 @@ public class UserService {
 		if (userSaved != null) {
 			throw new SystemException("Email already exists");
 		}
+	}
 
-		userSaved = userRepository.findByLogin(user.getLogin());
+	public User findByEmail(String email) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(email);
 
-		if (userSaved != null) {
-			throw new SystemException("Login already exists");
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found");
 		}
+
+		return user;
 	}
 
 	/*
