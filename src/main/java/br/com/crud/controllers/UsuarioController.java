@@ -1,5 +1,6 @@
 package br.com.crud.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.crud.dtos.UsuarioDto;
 import br.com.crud.entities.Usuario;
 import br.com.crud.services.UsuarioService;
+import br.com.crud.utils.DtosEntitiesConverter;
 
 @RestController
 @RequestMapping("api/users")
@@ -28,27 +31,36 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
+	@Autowired
+	private DtosEntitiesConverter<Usuario, UsuarioDto> converter;
+
 	@GetMapping
-	public ResponseEntity<List<Usuario>> listAll() {
+	public ResponseEntity<List<UsuarioDto>> listAll() {
 		List<Usuario> usuarios = usuarioService.listarTodos();
-		return CollectionUtils.isEmpty(usuarios) ? ResponseEntity.notFound().build() : ResponseEntity.ok(usuarios);
+		List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
+		usuarios.forEach(usuario -> usuariosDto.add(converter.convertToDto(usuario, new UsuarioDto())));
+
+		return CollectionUtils.isEmpty(usuariosDto) ? ResponseEntity.notFound().build()
+				: ResponseEntity.ok(usuariosDto);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> findById(@PathVariable Long id) throws Exception {
+	public ResponseEntity<UsuarioDto> findById(@PathVariable Long id) throws Exception {
 		Usuario usuario = usuarioService.buscarPorId(id);
-		return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+		return usuario != null ? ResponseEntity.ok(converter.convertToDto(usuario, new UsuarioDto()))
+				: ResponseEntity.notFound().build();
 	}
 
 	@PostMapping("/signup")
-	public void signup(@RequestBody Usuario usuario) {
-		System.out.println("aqui o cara se cadastra");
+	public ResponseEntity<UsuarioDto> signup(@Valid @RequestBody UsuarioDto usuarioDto) throws Exception {
+		Usuario usuarioSalvo = usuarioService.salvar(converter.convertToEntity(new Usuario(), usuarioDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertToDto(usuarioSalvo, new UsuarioDto()));
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> save(@Valid @RequestBody Usuario usuario) throws Exception {
-		Usuario usuarioSalvo = usuarioService.salvar(usuario);
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
+	public ResponseEntity<UsuarioDto> save(@Valid @RequestBody UsuarioDto usuarioDto) throws Exception {
+		Usuario usuarioSalvo = usuarioService.salvar(converter.convertToEntity(new Usuario(), usuarioDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertToDto(usuarioSalvo, new UsuarioDto()));
 	}
 
 	@DeleteMapping("/{id}")
@@ -58,9 +70,10 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Usuario> update(@PathVariable Long id, @Valid @RequestBody Usuario usuario) throws Exception {
-		Usuario usuarioSalvo = usuarioService.atualizar(id, usuario);
-		return ResponseEntity.ok(usuarioSalvo);
+	public ResponseEntity<UsuarioDto> update(@PathVariable Long id, @Valid @RequestBody UsuarioDto usuarioDto)
+			throws Exception {
+		Usuario usuarioSalvo = usuarioService.atualizar(id, converter.convertToEntity(new Usuario(), usuarioDto));
+		return ResponseEntity.ok(converter.convertToDto(usuarioSalvo, new UsuarioDto()));
 	}
 
 	/*

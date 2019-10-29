@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -23,12 +24,15 @@ public class Usuario extends EntidadePadrao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotEmpty
 	@Column(name = "nome")
 	private String nome;
 
+	@NotEmpty
 	@Column(name = "email")
 	private String email;
 
+	@NotEmpty
 	@Column(name = "senha")
 	private String senha;
 

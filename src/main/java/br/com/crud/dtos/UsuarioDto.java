@@ -1,37 +1,59 @@
 package br.com.crud.dtos;
 
-public class UsuarioDto {
+import java.util.List;
 
-	private String login;
-	private String password;
+public class UsuarioDto extends DtoPadrao {
 
-	public UsuarioDto() {
+	private static final long serialVersionUID = 1L;
 
-	}
-
-	public UsuarioDto(String login, String password) {
-		this.login = login;
-		this.password = password;
-	}
+	private Long id;
+	private String nome;
+	private String email;
+	private String senha;
+	private List<PermissaoDto> permissoes;
 
 	/*
-	 * Getters e Setters
+	 * Gettes e Setters
 	 */
 
-	public String getLogin() {
-		return login;
+	public Long getId() {
+		return id;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public List<PermissaoDto> getPermissoes() {
+		return permissoes;
+	}
+
+	public void setPermissoes(List<PermissaoDto> permissoes) {
+		this.permissoes = permissoes;
 	}
 
 }
