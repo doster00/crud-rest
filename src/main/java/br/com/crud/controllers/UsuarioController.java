@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.crud.dtos.UsuarioDto;
@@ -40,15 +39,14 @@ public class UsuarioController {
 		List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
 		usuarios.forEach(usuario -> usuariosDto.add(converter.convertToDto(usuario, new UsuarioDto())));
 
-		return CollectionUtils.isEmpty(usuariosDto) ? ResponseEntity.notFound().build()
-				: ResponseEntity.ok(usuariosDto);
+		return CollectionUtils.isEmpty(usuariosDto) ? ResponseEntity.ok().build() : ResponseEntity.ok(usuariosDto);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDto> findById(@PathVariable Long id) throws Exception {
 		Usuario usuario = usuarioService.buscarPorId(id);
 		return usuario != null ? ResponseEntity.ok(converter.convertToDto(usuario, new UsuarioDto()))
-				: ResponseEntity.notFound().build();
+				: ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/signup")
@@ -64,9 +62,9 @@ public class UsuarioController {
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Long codigo) throws Exception {
+	public ResponseEntity<Void> remover(@PathVariable Long codigo) throws Exception {
 		usuarioService.excluir(codigo);
+		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/{id}")

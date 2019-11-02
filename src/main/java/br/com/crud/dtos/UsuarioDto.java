@@ -3,12 +3,10 @@ package br.com.crud.dtos;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class UsuarioDto extends DtoPadrao {
 
 	private static final long serialVersionUID = 1L;
