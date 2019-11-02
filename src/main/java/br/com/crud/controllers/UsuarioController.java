@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import br.com.crud.mapper.UsuarioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +34,13 @@ public class UsuarioController {
 
 	@GetMapping
 	public ResponseEntity<List<UsuarioDto>> listAll() {
-		List<Usuario> usuarios = usuarioService.listarTodos();
-		List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
-		usuarios.forEach(usuario -> usuariosDto.add(usuarioToUsuarioDto(usuario)));
-		return CollectionUtils.isEmpty(usuariosDto) ? ResponseEntity.ok().build() : ResponseEntity.ok(usuariosDto);
+//		List<Usuario> usuarios = usuarioService.listarTodos();
+
+		List<UsuarioDto> usuarioDtos = UsuarioMapper.INSTANCE.toUsuariosDto(usuarioService.listarTodos());
+
+//		List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
+//		usuarioDtos.forEach(usuario -> usuariosDto.add(usuarioToUsuarioDto(usuario)));
+		return CollectionUtils.isEmpty(usuarioDtos) ? ResponseEntity.ok().build() : ResponseEntity.ok(usuarioDtos);
 	}
 
 	@GetMapping("/{id}")
@@ -54,8 +58,8 @@ public class UsuarioController {
 
 	@PostMapping
 	public ResponseEntity<UsuarioDto> save(@Valid @RequestBody UsuarioDto usuarioDto) throws Exception {
-		Usuario usuarioSalvo = usuarioService.salvar(usuarioDtoToUsuario(usuarioDto));
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioToUsuarioDto(usuarioSalvo));
+		Usuario usuarioSalvo = usuarioService.salvar(UsuarioMapper.INSTANCE.dtoToDomain(usuarioDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.INSTANCE.domainToDto(usuarioSalvo));
 	}
 
 	@DeleteMapping("/{id}")
