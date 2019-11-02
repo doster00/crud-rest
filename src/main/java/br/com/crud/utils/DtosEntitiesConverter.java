@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import br.com.crud.dtos.DtoPadrao;
 import br.com.crud.entities.EntidadePadrao;
 
+@Deprecated
 @Component
 public class DtosEntitiesConverter<T extends EntidadePadrao, E extends DtoPadrao> {
 

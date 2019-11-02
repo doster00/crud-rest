@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.crud.dtos.PermissaoDto;
 import br.com.crud.dtos.UsuarioDto;
+import br.com.crud.entities.Permissao;
 import br.com.crud.entities.Usuario;
 import br.com.crud.services.UsuarioService;
-import br.com.crud.utils.DtosEntitiesConverter;
 
 @RestController
 @RequestMapping("api/users")
@@ -30,35 +31,31 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@Autowired
-	private DtosEntitiesConverter<Usuario, UsuarioDto> converter;
-
 	@GetMapping
 	public ResponseEntity<List<UsuarioDto>> listAll() {
 		List<Usuario> usuarios = usuarioService.listarTodos();
 		List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
-		usuarios.forEach(usuario -> usuariosDto.add(converter.convertToDto(usuario, new UsuarioDto())));
-
+		usuarios.forEach(usuario -> usuariosDto.add(usuarioToUsuarioDto(usuario)));
 		return CollectionUtils.isEmpty(usuariosDto) ? ResponseEntity.ok().build() : ResponseEntity.ok(usuariosDto);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDto> findById(@PathVariable Long id) throws Exception {
 		Usuario usuario = usuarioService.buscarPorId(id);
-		return usuario != null ? ResponseEntity.ok(converter.convertToDto(usuario, new UsuarioDto()))
-				: ResponseEntity.ok().build();
+		return usuario != null ? ResponseEntity.ok(usuarioToUsuarioDto(usuario)) : ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<UsuarioDto> signup(@Valid @RequestBody UsuarioDto usuarioDto) throws Exception {
-		Usuario usuarioSalvo = usuarioService.salvar(converter.convertToEntity(new Usuario(), usuarioDto));
-		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertToDto(usuarioSalvo, new UsuarioDto()));
+		Usuario usuario = usuarioDtoToUsuario(usuarioDto);
+		Usuario usuarioSalvo = usuarioService.salvar(usuario);
+		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioToUsuarioDto(usuarioSalvo));
 	}
 
 	@PostMapping
 	public ResponseEntity<UsuarioDto> save(@Valid @RequestBody UsuarioDto usuarioDto) throws Exception {
-		Usuario usuarioSalvo = usuarioService.salvar(converter.convertToEntity(new Usuario(), usuarioDto));
-		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertToDto(usuarioSalvo, new UsuarioDto()));
+		Usuario usuarioSalvo = usuarioService.salvar(usuarioDtoToUsuario(usuarioDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioToUsuarioDto(usuarioSalvo));
 	}
 
 	@DeleteMapping("/{id}")
@@ -70,8 +67,49 @@ public class UsuarioController {
 	@PutMapping("/{id}")
 	public ResponseEntity<UsuarioDto> update(@PathVariable Long id, @Valid @RequestBody UsuarioDto usuarioDto)
 			throws Exception {
-		Usuario usuarioSalvo = usuarioService.atualizar(id, converter.convertToEntity(new Usuario(), usuarioDto));
-		return ResponseEntity.ok(converter.convertToDto(usuarioSalvo, new UsuarioDto()));
+		Usuario usuarioSalvo = usuarioService.atualizar(id, usuarioDtoToUsuario(usuarioDto));
+		return ResponseEntity.ok(usuarioToUsuarioDto(usuarioSalvo));
+	}
+
+	// TODO melhorar depois
+	private Usuario usuarioDtoToUsuario(UsuarioDto usuarioDto) {
+		Usuario usuario = new Usuario();
+		usuario.setId(usuarioDto.getId());
+		usuario.setEmail(usuarioDto.getEmail());
+		usuario.setNome(usuarioDto.getNome());
+		usuario.setSenha(usuarioDto.getSenha());
+
+		usuario.setPermissoes(new ArrayList<Permissao>());
+		usuarioDto.getPermissoes()
+				.forEach(permissao -> usuario.getPermissoes().add(permissaoDtoToPermissao(permissao)));
+
+		return usuario;
+	}
+
+	private UsuarioDto usuarioToUsuarioDto(Usuario usuario) {
+		UsuarioDto usuarioDto = new UsuarioDto();
+		usuarioDto.setId(usuario.getId());
+		usuarioDto.setEmail(usuario.getEmail());
+		usuarioDto.setNome(usuario.getNome());
+		usuarioDto.setSenha(usuario.getSenha());
+		usuarioDto.setPermissoes(new ArrayList<PermissaoDto>());
+		usuario.getPermissoes()
+				.forEach(permissao -> usuarioDto.getPermissoes().add(permissaoToPermissaoDto(permissao)));
+		return usuarioDto;
+	}
+
+	private Permissao permissaoDtoToPermissao(PermissaoDto permissaoDto) {
+		Permissao permissao = new Permissao();
+		permissao.setId(permissaoDto.getId());
+		permissao.setDescricao(permissaoDto.getDescricao());
+		return permissao;
+	}
+
+	private PermissaoDto permissaoToPermissaoDto(Permissao permissao) {
+		PermissaoDto permissaoDto = new PermissaoDto();
+		permissaoDto.setId(permissao.getId());
+		permissaoDto.setDescricao(permissao.getDescricao());
+		return permissaoDto;
 	}
 
 	/*
