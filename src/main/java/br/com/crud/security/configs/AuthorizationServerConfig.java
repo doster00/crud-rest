@@ -30,7 +30,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory() //
-				.withClient("crud-rest") //
+				.withClient("web-client") //
 				.secret("$2a$10$79EyPu/eZ0aLTjwcDgrATObeajUXOsRUATpzKZ9camrQukwPDFNH2") //
 				.scopes("read", "write") //
 				.authorizedGrantTypes("password", "refresh_token") //
