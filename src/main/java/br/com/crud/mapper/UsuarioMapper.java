@@ -1,19 +1,24 @@
 package br.com.crud.mapper;
 
-import br.com.crud.dtos.UsuarioDto;
-import br.com.crud.entities.Usuario;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
+import br.com.crud.dtos.UsuarioDto;
+import br.com.crud.entities.Usuario;
 
 @Mapper
 public interface UsuarioMapper {
 
-    UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
+	UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
 
-    Usuario dtoToDomain(UsuarioDto usuarioDto);
-    UsuarioDto domainToDto(Usuario usuario);
-    List<UsuarioDto> toUsuariosDto(List<Usuario> usuarios);
+	Usuario usuarioDtoToUsuario(UsuarioDto usuarioDto);
+
+	UsuarioDto usuarioToUsuarioDto(Usuario usuario);
+
+	List<UsuarioDto> usuariosToUsuariosDto(List<Usuario> usuarios);
+
+	List<Usuario> usuariosDtoToUsuarios(List<UsuarioDto> usuariosDto);
 
 }
